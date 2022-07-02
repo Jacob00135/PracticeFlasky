@@ -1,3 +1,2 @@
 .idea/*
-admin_dir/*
-requirements.txt
+__pycache__/*
