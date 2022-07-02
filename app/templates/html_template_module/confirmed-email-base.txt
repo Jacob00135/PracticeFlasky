@@ -1,0 +1,13 @@
+{% block title %}{% endblock %}
+
+{% block h1_title %}{% endblock %}
+
+您好，{{ customer_name }}
+
+{% block main_text %}{% endblock %}链接有效期为10分钟
+
+注意：{% block waring_info %}{% endblock %}
+
+{{ confirm_link }}
+
+备注：{% block notes %}{% endblock %}

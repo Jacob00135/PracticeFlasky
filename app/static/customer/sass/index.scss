@@ -1,0 +1,276 @@
+@import '../../_variable.scss';
+@import '../../_mixin.scss';
+
+// 巨幕左右内边距、背景色
+#customer-info {
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: #e3e3e3;
+
+    @media screen and (min-width: $sm) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    @media screen and (min-width: $md) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @media screen and (min-width: $lg) {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+// 用户头像
+#customer-info #head-portrait {
+    width: 100%;
+
+    @media screen and (max-width: ($sm - 1px)) {
+        width: 200px;
+    }
+}
+
+// 用户基本信息
+#customer-info #basic-info {
+    padding-left: 0;
+
+    @media screen and (max-width: ($sm - 1px)) {
+        padding-top: 20px;
+        text-align: center;
+    }
+
+    // 自定义列表组
+    @include clear-ul;
+
+    ul > li {
+        padding-top: 5px;
+        padding-bottom: 5px;
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+
+        @media screen and (max-width: ($md - 1px)) {
+            padding-top: 3px;
+            padding-bottom: 3px;
+
+            &:first-child {
+                padding-top: 0;
+            }
+        }
+    }
+
+    // 用户名
+    #customer-name {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 700;
+    }
+}
+
+// 关注者信息
+#follow-info {
+    ul {
+        max-width: 180px;
+        margin-top: 5px;
+        margin-bottom: 0;
+
+        @media screen and (max-width: ($sm - 1px)) {
+            margin-top: 20px;
+        }
+
+        & > li {
+            padding: 0;
+            border-width: 0;
+
+            &#comment-count > a {
+                opacity: 1;
+            }
+
+            & > a {
+                display: block;
+                width: 100%;
+                border-radius: 0;
+                text-align: left;
+
+                .number {
+                    float: right;
+                    border-radius: 10px;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    box-shadow: 0 0 2px 2px rgba(0, 0, 0, .1);
+                    background-color: #fff;
+                    color: #000;
+                }
+            }
+
+            & > #unfollow,
+            & > #follow {
+                display: block;
+                width: 100%;
+                border-radius: 0;
+                text-align: center;
+            }
+        }
+    }
+}
+
+// 编辑信息组件
+#update-group {
+    margin-top: 20px;
+
+    @media screen and (max-width: ($sm - 1px)) {
+        text-align: center;
+    }
+}
+
+// 个人简介
+#desc {
+    margin-top: 20px;
+    border-color: #8bd8e8;
+
+    .panel-heading {
+        background-color: #bee5f9;
+    }
+}
+
+// 警告模态框
+#hint-modal .modal-body span {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 5px;
+}
+
+// 更改头像模态框
+#update-hp-modal {
+    .modal-body {
+        .img-thumbnail {
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        // 上传文件
+        #upload-head-portrait {
+            position: relative;
+            overflow: hidden;
+            max-width: 250px;
+            height: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+            border: 1px solid #8bd8e8;
+            background-color: #cff7ff;
+            text-align: center;
+            line-height: 30px;
+            transition: all .3s;
+
+            &:hover {
+                background-color: #a4cfff;
+            }
+
+            .text {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                padding-left: 10px;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            input {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                padding-left: 100%;
+                cursor: pointer;
+            }
+        }
+
+        // 错误提示框
+        #upload-alert {
+            margin-top: 10px;
+            margin-bottom: 0;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+    }
+}
+
+// 文章列表
+.article-list {
+    h3 {
+        margin-top: 0;
+        margin-bottom: 30px;
+        padding-top: 20px;
+    }
+
+    #article-list-main-content {
+        padding-bottom: 20px;
+        box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
+    }
+
+    .box-1 {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .box-2 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        .title {
+            font-size: 15px;
+            color: #333;
+
+            &:hover {
+                text-decoration: none;
+                color: #33a0ff;
+            }
+        }
+    }
+
+    .box-3 {
+        display: flex;
+        justify-content: flex-end;
+
+        .comment-count {
+            position: relative;
+            height: 20px;
+            color: #70b2ec;
+            
+            .glyphicon {
+                position: absolute;
+                top: 4px;
+            }
+
+            .text {
+                margin-left: 18px;
+            }
+        }
+
+        .edit {
+            margin-left: 5px;
+        }
+    }
+}
+
+.no-articles {
+    font-size: 16px;
+}
+
+// 分页导航
+nav.pagination-box {
+    text-align: center;
+}

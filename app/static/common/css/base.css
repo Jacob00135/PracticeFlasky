@@ -1,0 +1,30 @@
+#nav-bar a:hover {
+  color: #555;
+  background-color: #e7e7e7;
+}
+
+body {
+  padding-top: 50px;
+  background-color: #eee;
+}
+
+#nav-bar #nav-head-portrait {
+  width: 30px;
+  height: 30px;
+}
+@media screen and (min-width: 768px) {
+  #nav-bar .dropdown-toggle {
+    height: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 30px;
+  }
+}
+@media screen and (max-width: 767px) {
+  #nav-bar .dropdown-toggle {
+    height: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 30px;
+  }
+}/*# sourceMappingURL=base.css.map */

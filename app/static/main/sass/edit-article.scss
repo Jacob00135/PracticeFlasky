@@ -1,0 +1,26 @@
+// 版心
+#main-content {
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
+}
+
+.edit-title {
+    margin-top: 0;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+// 编辑文章表单
+#edit-article-form {
+    #article-content {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .markdown-edit-containter .markdown-preview {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+}

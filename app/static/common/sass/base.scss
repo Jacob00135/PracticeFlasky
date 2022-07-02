@@ -1,0 +1,46 @@
+@import '../../_variable.scss';
+
+%nav-hover {
+    color: #555;
+    background-color: #e7e7e7;
+}
+
+// 顶部固定导航
+body {
+    padding-top: 50px;
+    background-color: #eee; // 全局背景色
+}
+
+// 导航栏
+#nav-bar {
+    // 点击导航栏中的链接，背景、字体颜色变色
+    a:hover {
+        @extend %nav-hover;
+    }
+
+    // 导航栏头像大小
+    #nav-head-portrait {
+        width: 30px;
+        height: 30px;
+    }
+
+    // 除了手机端的“账号管理”样式
+    @media screen and (min-width: $sm) {
+        .dropdown-toggle {
+            height: 50px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            line-height: 30px;
+        }
+    }
+
+    // 手机端的“账号管理”样式
+    @media screen and (max-width: ($sm - 1px)) {
+        .dropdown-toggle {
+            height: 40px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            line-height: 30px;
+        }
+    }
+}

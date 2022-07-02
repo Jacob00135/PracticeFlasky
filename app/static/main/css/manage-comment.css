@@ -1,0 +1,80 @@
+#main-content {
+  padding-bottom: 20px;
+  -webkit-box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 40px;
+  padding-top: 20px;
+}
+
+.comment-list .disabled-warning {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  margin-left: -25px;
+  color: #ff7b7b;
+  font-size: 50px;
+}
+.comment-list .box-1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 5px;
+}
+.comment-list .box-1 .right-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+.comment-list .action-group {
+  margin-left: 5px;
+}
+.comment-list .action-group [id^=dropdownMenu] {
+  width: 20px;
+  height: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+}
+.comment-list .action-group [id^=dropdownMenu] .glyphicon {
+  left: -1px;
+}
+.comment-list .action-group .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+.comment-list .action-group .dropdown-menu > li > a:hover, .comment-list .action-group .dropdown-menu > li > button:hover {
+  color: #555;
+  background-color: #e7e7e7;
+}
+.comment-list .action-group .disabled-comment,
+.comment-list .action-group .use-comment {
+  display: block;
+  width: 100%;
+  padding: 3px 20px;
+  border-width: 0;
+  background-color: #fff;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+  text-align: left;
+}
+.comment-list .markdown-preview {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+nav.pagination-box {
+  text-align: center;
+}/*# sourceMappingURL=manage-comment.css.map */

@@ -1,0 +1,22 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}邮件确认{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/auth/css/confirm.css" />
+{% endblock %}
+{% block body %}
+<div class="jumbotron text-center">
+    {% if info_type == 'error' %}
+        <h1 id="icon-title-danger" class="glyphicon glyphicon-remove-circle"></h1>
+        <div class="alert alert-danger" role="alert"><strong class="h3">{{ info }}</strong></div>
+    {% elif info_type == 'hint' %}
+        <h1 id="icon-title-success" class="glyphicon glyphicon-ok-circle"></h1>
+        <div class="alert alert-success" role="alert"><strong class="h3">{{ info }}</strong></div>
+    {% endif %}
+    <p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">主页</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">登录</a>
+    </p>
+</div>
+{% endblock %}
+{% block javascript %}
+{% endblock %}

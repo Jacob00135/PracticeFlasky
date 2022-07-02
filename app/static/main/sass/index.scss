@@ -1,0 +1,93 @@
+// 版心
+#main-content {
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
+}
+
+.welcome {
+    margin-top: 0;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+// 发布文章表单
+#publish-article-form {
+    #article-content {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .markdown-edit-containter .markdown-preview {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+}
+
+// 显示文章导航
+.show-article-nav {
+    margin-top: 20px;
+
+    & > li > a:hover {
+        background-color: #ddd;
+    }
+}
+
+// 文章列表
+.article-list {
+    & > li:first-child {
+        border-top-width: 0;
+    }
+
+    .box-1 {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .box-2 {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        .title {
+            font-size: 15px;
+            color: #333;
+
+            &:hover {
+                text-decoration: none;
+                color: #33a0ff;
+            }
+        }
+    }
+
+    .box-3 {
+        display: flex;
+        justify-content: flex-end;
+
+        .comment-count {
+            position: relative;
+            height: 20px;
+            color: #70b2ec;
+            
+            .glyphicon {
+                position: absolute;
+                top: 4px;
+            }
+
+            .text {
+                margin-left: 18px;
+            }
+        }
+
+        .edit {
+            margin-left: 5px;
+        }
+    }
+}
+
+// 分页导航
+nav.pagination-box {
+    text-align: center;
+}

@@ -1,0 +1,88 @@
+// 版心
+#main-content {
+    padding-bottom: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
+}
+
+h3 {
+    margin-top: 0;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+// 评论列表
+.comment-list {
+    
+    .disabled-warning {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        margin-left: -25px;
+        color: #ff7b7b;
+        font-size: 50px;
+    }
+
+    .box-1 {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+
+        .right-box {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+
+    // 操作下拉菜单
+    .action-group {
+        margin-left: 5px;
+    
+        [id^="dropdownMenu"] {
+            width: 20px;
+            height: 20px;
+            padding-top: 0;
+            padding-bottom: 0;
+            border-width: 0;
+
+            .glyphicon {
+                left: -1px;
+            }
+        }
+
+        .dropdown-menu {
+            left: auto;
+            right: 0;
+
+            & > li > a:hover,
+            & > li > button:hover {
+                color: #555;
+                background-color: #e7e7e7;
+            }
+        }
+
+        .disabled-comment,
+        .use-comment {
+            display: block;
+            width: 100%;
+            padding: 3px 20px;
+            border-width: 0;
+            background-color: #fff;
+            clear: both;
+            font-weight: 400;
+            line-height: 1.42857143;
+            color: #333;
+            white-space: nowrap;
+            text-align: left;
+        }
+    }
+
+    .markdown-preview {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+// 分页导航
+nav.pagination-box {
+    text-align: center;
+}

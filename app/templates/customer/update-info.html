@@ -1,0 +1,71 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}Flasky&nbsp;-&nbsp;{{ cus.customer_name }}{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/customer/css/update-info.css" />
+{% endblock %}
+{% block body %}
+<!-- 警告的模态框 [start] -->
+<div id="hint-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span class="glyphicon glyphicon-ok text-success hidden"></span>
+                <span class="glyphicon glyphicon-remove text-danger hidden"></span>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 警告的模态框 [end] -->
+
+<!-- 修改信息表单 [start] -->
+<h3 class="text-center">修改个人信息</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-lg-push-3 col-md-6 col-md-push-3 col-sm-8 col-sm-push-2">
+            <form id="update-info-form" action="{{ url_for('customer.update_customer_info', customer_name=cus.customer_name) }}" method="post" name="update-info">
+                <div class="form-group">
+                    <label for="customer-name">用户名</label>
+                    <input type="text" id="customer-name" name="customer-name" class="form-control input-lg" maxlength="20" placeholder="用户名" required autocomplete="off" value="{{ cus.customer_name }}" />
+                </div>
+                {% if current_user.is_administrator() %}
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" name="email" class="form-control input-lg" placeholder="邮箱" required autocomplete="off" value="{{ cus.customer_email }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="role-name">用户身份</label>
+                        <select id="role-name" class="form-control" name="role-name">
+                            {% for value, text in {'Customer': '普通用户', 'Moderator': '协管员', 'Administrator': '管理员'}.items(): %}
+                                {% if cus.role.role_name == value %}
+                                    <option value="{{ value }}" selected="selected">{{ text }}</option>
+                                {% else %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="description">个人简介</label>
+                    <textarea id="description" class="form-control" name="description" rows="3" placeholder="个人简介" maxlength="200" autocomplete="off"></textarea>
+                </div>
+                <button id="submit-btn" type="submit" class="btn btn-primary btn-block btn-lg">确定</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 修改信息表单 [end] -->
+
+{% endblock %}
+{% block javascript %}
+<script src="/static/customer/js/update-info.js"></script>
+{% endblock %}

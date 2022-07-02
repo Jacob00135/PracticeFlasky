@@ -1,0 +1,6 @@
+{% extends "html_template_module/confirmed-email-base.txt" %}
+{% block title %}注册确认{% endblock %}
+{% block h1_title %}这是一封注册确认邮件{% endblock %}
+{% block main_text %}欢迎来到Flasky！您正在Flasky上注册一个新用户，为了确保是您在操作，请点击下面的链接完成注册，{% endblock %}
+{% block waring_info %}请不要让其他人知道这个链接，否则您的邮箱可能被您本人之外的人用于注册{% endblock %}
+{% block notes %}如果您不想在Flasky上注册，或不知道自己为什么收到这封邮件，请忽略它{% endblock %}

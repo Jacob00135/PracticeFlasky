@@ -1,0 +1,168 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}管理评论{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/main/css/manage-comment.css" />
+{% endblock %}
+{% block body %}
+
+<!-- 警告的模态框 [start] -->
+<div id="hint-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span class="glyphicon glyphicon-ok text-success hidden"></span>
+                <span class="glyphicon glyphicon-remove text-danger hidden"></span>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 警告的模态框 [end] -->
+
+<div class="container">
+    <div class="row">
+        <div id="main-content" class="col-lg-8 col-lg-push-2 col-md-10 col-md-push-1">
+            <h3 class="text-center">管理评论</h3>
+
+            <!-- 评论列表 [start] -->
+            <ul class="list-group comment-list">
+                {% for comment in comment_list %}
+                    <li class="list-group-item" data-comment-index="{{ comment.comment_id }}">
+                        {% if comment.disabled %}
+                            <span class="glyphicon glyphicon-ban-circle disabled-warning"></span>
+                        {% else %}
+                            <span class="hidden glyphicon glyphicon-ban-circle disabled-warning"></span>
+                        {% endif %}
+                        <div class="box-1">
+                            <a class="customer-name" href="{{ url_for('customer.customer_page', customer_name=comment.author.customer_name) }}" target="_blank">{{ comment.author.customer_name }}</a>
+                            <div class="right-box">
+                                <span class="comment-time">{{ moment(comment.comment_time).format('L') }}</span>
+                                <div class="dropdown action-group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu{{ loop.index }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <span class="glyphicon glyphicon-option-vertical"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu{{ loop.index }}">
+                                        <li><a href="{{ url_for('main.show_article', article_id=comment.article_id) }}" target="_blank">前往文章</a></li>
+                                        <li class="disabled-button-box">
+                                            {% if comment.disabled %}
+                                                <button class="hidden disabled-comment" type="button">禁用</button>
+                                                <button class="use-comment" type="button">取消禁用</button>
+                                            {% else %}
+                                                <button class="disabled-comment" type="button">禁用</button>
+                                                <button class="hidden use-comment" type="button">取消禁用</button>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-content">
+                            <div class="markdown-edit markdown-preview">{{ comment.content }}</div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- 评论列表 [end] -->
+
+            <!-- 分页导航 [start] -->
+            {% if page_count > 1 %}
+                <nav class="pagination-box" aria-label="Page navigation">
+                    <ul class="pagination">
+                        <!-- 第一页 -->
+                        {% if current_page == 1 %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.manage_comment_page', page=1) }}">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 上一页 -->
+                        {% if current_page == 1 %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.manage_comment_page', page=current_page - 1) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 数字翻页 -->
+                        {% if page_count <= 3 %}
+                            {% for i in range(1, page_count + 1) %}
+                                <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.manage_comment_page', page=i) }}">{{ i }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% if current_page > 1 %}
+                                {% if current_page < page_count %}
+                                    {% for i in range(current_page - 1, current_page + 2) %}
+                                        <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.manage_comment_page', page=i) }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for i in range(page_count - 2, page_count + 1) %}
+                                        <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.manage_comment_page', page=i) }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {% for i in range(1, 4) %}
+                                    <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.manage_comment_page', page=i) }}">{{ i }}</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <!-- 下一页 -->
+                        {% if current_page == page_count %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.manage_comment_page', page=current_page + 1) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 最后一页 -->
+                        {% if current_page == page_count %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.manage_comment_page', page=page_count) }}">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+            <!-- 分页导航 [end] -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+<script src="/static/main/js/manage-comment.js"></script>
+{% endblock %}

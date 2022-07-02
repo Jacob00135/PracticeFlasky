@@ -1,0 +1,129 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}Flasky&nbsp;-&nbsp;关注{{ cus.customer_name }}的用户{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/customer/css/fans-list.css" />
+{% endblock %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div id="main-content" class="col-lg-8 col-lg-push-2 col-md-10 col-md-push-1">
+            <h3 class="text-center">关注{{ cus.customer_name }}的用户</h3>
+
+            <!-- 用户列表 [start] -->
+            {% if follow_list %}
+            <ul class="list-group follow-list">
+                {% for follow in follow_list %}
+                    <li class="list-group-item follow-info">
+                        <a class="head-portrait" href="{{ url_for('customer.customer_page', customer_name=follow.fans.customer_name) }}" target="_blank">
+                            <img src="{{ follow.fans.get_head_portrait_full_path() }}" alt="head-portrait" />
+                        </a>
+                        <div class="info">
+                            <div class="box-1">
+                                <a class="customer-name" href="{{ url_for('customer.customer_page', customer_name=follow.fans.customer_name) }}" target="_blank">{{ follow.fans.customer_name }}</a>
+                            </div>
+                            <div class="box-2">
+                                <span class="desc">简介：{{ follow.fans.about_me }}</span>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-center no-articles">没有关注的用户</p>
+            {% endif %}
+            <!-- 用户列表 [end] -->
+
+            <!-- 分页导航 [start] -->
+            {% if page_count > 1 %}
+                <nav class="pagination-box" aria-label="Page navigation">
+                    <ul class="pagination">
+                        <!-- 第一页 -->
+                        {% if current_page == 1 %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=1) }}">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 上一页 -->
+                        {% if current_page == 1 %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=current_page - 1) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 数字翻页 -->
+                        {% if page_count <= 3 %}
+                            {% for i in range(1, page_count + 1) %}
+                                <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% if current_page > 1 %}
+                                {% if current_page < page_count %}
+                                    {% for i in range(current_page - 1, current_page + 2) %}
+                                        <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for i in range(page_count - 2, page_count + 1) %}
+                                        <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {% for i in range(1, 4) %}
+                                    <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <!-- 下一页 -->
+                        {% if current_page == page_count %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=current_page + 1) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 最后一页 -->
+                        {% if current_page == page_count %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('customer.show_fans', customer_name=cus.customer_name, page=page_count) }}">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+            <!-- 分页导航 [end] -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+{% endblock %}

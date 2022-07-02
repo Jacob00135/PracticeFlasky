@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        body {
+            padding: 30px;
+        }
+
+        h1 {
+            font-weight: 400;
+        }
+
+        h2 {
+            font-weight: 400;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        em {
+            display: block;
+            margin-bottom: 18px;
+            color: #ff0000;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        a {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .notes {
+            margin-top: 72px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>{% block h1_title %}{% endblock %}</h1>
+    <h2>您好，{{ customer_name }}</h2>
+    <p>{% block main_text %}{% endblock %}<strong>链接有效期为10分钟</strong></p>
+    <em>注意：{% block waring_info %}{% endblock %}</em>
+    <a class="confirm-link" href="{{ confirm_link }}" target="_blank">{{ confirm_link }}</a>
+    <p class="notes">备注：{% block notes %}{% endblock %}</p>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}登录{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/auth/css/login.css" />
+{% endblock %}
+{% block body %}
+<!-- 警告的模态框 [start] -->
+<div id="login-error-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">登录失败</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 警告的模态框 [end] -->
+
+<!-- 登录表单 [start] -->
+<h3 class="text-center">登录</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-lg-push-3 col-md-6 col-md-push-3 col-sm-8 col-sm-push-2">
+            <form action="{{ url_for('auth.login') }}" method="post" name="login">
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control input-lg" placeholder="邮箱" required autocomplete="off" />
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control input-lg" minlength="6" maxlength="20" placeholder="密码" required autocomplete="off" />
+                </div>
+                <button id="login-btn" type="submit" class="btn btn-primary btn-block btn-lg">登录</button>
+            </form>
+            <p id="forget-password" class="text-right"><a href="{{ url_for('auth.forget_password') }}">忘记密码</a></p>
+        </div>
+    </div>
+</div>
+<!-- 登录表单 [end] -->
+{% endblock %}
+{% block javascript %}
+<script src="/static/auth/js/login.js"></script>
+{% endblock %}

@@ -1,0 +1,26 @@
+// 警告模态框
+#hint-modal .modal-body span {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 5px;
+}
+
+// 修改个人信息表单
+#update-info-form {
+    .form-group label {
+        display: block;
+        padding-left: 16px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    #description {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    #role-name {
+        cursor: pointer;
+    }
+}

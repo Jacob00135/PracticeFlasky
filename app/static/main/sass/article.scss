@@ -1,0 +1,112 @@
+// 版心
+#main-content {
+    padding-bottom: 20px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, .2);
+}
+
+.article-title {
+    margin-top: 0;
+    margin-bottom: 40px;
+    padding-top: 20px;
+}
+
+// 作者信息
+.author-info {
+    position: relative;
+    height: 72px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #fff;
+
+    .head-portrait {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        width: 50px;
+        height: 50px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .info {
+        padding-left: 60px;
+
+        .box-1 {
+            margin-bottom: 5px;
+        }
+
+        .box-2 {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.box-3 {
+    display: flex;
+    justify-content: flex-end;
+
+    .edit {
+        margin-left: 5px;
+    }
+}
+
+// 文章内容
+.article-content {
+    margin-top: 20px;
+
+    .markdown-preview {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+}
+
+// 评论表单
+.comment-title {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+#publish-comment-form {
+    #comment-content {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .markdown-preview {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+}
+
+// 评论列表
+.comment-list {
+    margin-top: 20px;
+
+    .box-1 {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .markdown-preview {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+// 分页导航
+nav.pagination-box {
+    text-align: center;
+}

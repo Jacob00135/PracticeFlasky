@@ -1,0 +1,192 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}{{ article.author.customer_name }}&nbsp;-&nbsp;{{ article.title }}{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/main/css/article.css" />
+{% endblock %}
+{% block body %}
+<!-- 警告的模态框 [start] -->
+<div id="hint-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span class="glyphicon glyphicon-ok text-success hidden"></span>
+                <span class="glyphicon glyphicon-remove text-danger hidden"></span>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 警告的模态框 [end] -->
+
+<div class="container">
+    <div class="row">
+        <div id="main-content" class="col-lg-8 col-lg-push-2 col-md-10 col-md-push-1">
+            <!-- 标题 -->
+            <h3 class="text-center article-title">{{ article.title }}</h3>
+
+            <!-- 作者信息 [start] -->
+            <div class="author-info">
+                <a class="head-portrait" href="{{ url_for('customer.customer_page', customer_name=article.author.customer_name) }}" target="_blank">
+                    <img src="{{ article.author.get_head_portrait_full_path() }}" alt="head-portrait" />
+                </a>
+                <div class="info">
+                    <div class="box-1">
+                        <a class="customer-name" href="{{ url_for('customer.customer_page', customer_name=article.author.customer_name) }}" target="_blank">{{ article.author.customer_name }}</a>
+                    </div>
+                    <div class="box-2">
+                        <span class="desc">简介：{{ article.author.about_me }}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 作者信息 [end] -->
+
+            <!-- 发布时间、编辑按钮 -->
+            <div class="box-3">
+                <span class="publish-time text-right">发布于：{{ moment(article.publish_time).format('L') }}</span>
+                {% if current_user.customer_id == article.author_id %}
+                    <a class="edit" href="{{ url_for('main.edit_article', article_id=article.article_id) }}" target="_blank">编辑</a>
+                {% endif %}
+            </div>
+
+            <!-- 文章内容 [start] -->
+            <div class="article-content">
+                <div class="markdown-edit markdown-preview">{{ article.content }}</div>
+            </div>
+            <!-- 文章内容 [end] -->
+
+            <!-- 评论表单 [start] -->
+            <h3 class="comment-title text-center">评论</h3>
+            {% if current_user.is_authenticated %}
+                <form id="publish-comment-form" action="{{ url_for('main.publish_comment', article_id=article.article_id) }}" method="post" name="publish-comment">
+                    <div class="form-group markdown-edit-containter">
+                        <label for="comment-content">发表评论（支持markdown语法）</label>
+                        <textarea id="comment-content" class="form-control markdown-edit" name="comment-content" rows="4" placeholder="评论内容" required autocomplete="off"></textarea>
+                        <div class="markdown-preview"></div>
+                    </div>
+                    <button id="submit-btn" type="submit" class="btn btn-primary btn-block">发表</button>
+                </form>
+            {% else %}
+                <div class="forbidden-comment text-center">
+                    <a class="login" href="{{ url_for('auth.login', next=url_for('main.show_article', article_id=article.article_id)) }}">登录</a>
+                    后才能评论
+                </div>
+            {% endif %}
+            <!-- 评论表单 [end] -->
+
+            <!-- 评论列表 [start] -->
+            <ul class="list-group comment-list">
+                {% for comment in comment_list %}
+                    <li class="list-group-item">
+                        <div class="box-1">
+                            <a class="customer-name" href="{{ url_for('customer.customer_page', customer_name=comment.author.customer_name) }}" target="_blank">{{ comment.author.customer_name }}</a>
+                            <span class="comment-time">{{ moment(comment.comment_time).format('L') }}</span>
+                        </div>
+                        <div class="comment-content">
+                            <div class="markdown-edit markdown-preview">{{ comment.content }}</div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <!-- 评论列表 [end] -->
+
+            <!-- 评论分页导航 [start] -->
+            {% if page_count > 1 %}
+                <nav class="pagination-box" aria-label="Page navigation">
+                    <ul class="pagination">
+                        <!-- 第一页 -->
+                        {% if current_page == 1 %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.show_article', article_id=article.article_id, page=1) }}">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 上一页 -->
+                        {% if current_page == 1 %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&laquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.show_article', article_id=article.article_id, page=current_page - 1) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 数字翻页 -->
+                        {% if page_count <= 3 %}
+                            {% for i in range(1, page_count + 1) %}
+                                <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.show_article', article_id=article.article_id, page=i) }}">{{ i }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% if current_page > 1 %}
+                                {% if current_page < page_count %}
+                                    {% for i in range(current_page - 1, current_page + 2) %}
+                                        <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.show_article', article_id=article.article_id, page=i) }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for i in range(page_count - 2, page_count + 1) %}
+                                        <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.show_article', article_id=article.article_id, page=i) }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {% for i in range(1, 4) %}
+                                    <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('main.show_article', article_id=article.article_id, page=i) }}">{{ i }}</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <!-- 下一页 -->
+                        {% if current_page == page_count %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.show_article', article_id=article.article_id, page=current_page + 1) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <!-- 最后一页 -->
+                        {% if current_page == page_count %}
+                            <li class="disabled">
+                                <span>
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </span>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for('main.show_article', article_id=article.article_id, page=page_count) }}">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+            <!-- 评论分页导航 [end] -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script src="/static/main/js/article.js"></script>
+{% endblock %}

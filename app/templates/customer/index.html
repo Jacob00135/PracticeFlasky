@@ -1,0 +1,274 @@
+{% extends "html_template_module/base.html" %}
+{% block title %}Flasky&nbsp;-&nbsp;{{ cus.customer_name }}{% endblock %}
+{% block link %}
+<link rel="stylesheet" href="/static/customer/css/index.css" />
+{% endblock %}
+{% block body %}
+<!-- 警告的模态框 [start] -->
+<div id="hint-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span class="glyphicon glyphicon-ok text-success hidden"></span>
+                <span class="glyphicon glyphicon-remove text-danger hidden"></span>
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 警告的模态框 [end] -->
+
+<!-- 更换头像模态框 [start] -->
+<div id="update-hp-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">更换头像(上传的头像必须小于100KB, 扩展名必须是png或jpg或jpeg)</h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <img id="preview-head-portrait" class="img-thumbnail" src="" alt="head-portrait" />
+                    <div id="upload-head-portrait">
+                        <div class="text">上传</div>
+                        <input type="file" accept="image/png, image/jpeg, image/webp" />
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div id="upload-alert" class="col-xs-12 alert alert-danger alert-dismissible hidden" role="alert">
+                        <button class="close" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="content"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="submit-head-portrait" type="button" class="btn btn-primary disabled">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 更换头像模态框 [end] -->
+
+<!-- 用户信息 [start] -->
+<div class="container">
+    <div id="customer-info" class="jumbotron row">
+        <!-- 头像 [start] -->
+        <div class="col-sm-3 col-xs-12 text-center">
+            <img id="head-portrait" class="img-thumbnail" src="{{ cus.get_head_portrait_full_path() }}" alt="head-portrait" />
+        </div>
+        <!-- 头像 [end] -->
+
+        <!-- 基本信息 [start] -->
+        <div id="basic-info" class="col-lg-7 col-sm-6 col-xs-12">
+            <ul>
+                <li>
+                    <h1 id="customer-name">{{ cus.customer_name }}</h1>
+                </li>
+                {% if current_user.is_administrator() %}
+                    <li>用户身份：{{ cus.role.get_chinese_role_name() }}</li>
+                    <li>邮箱：{{ cus.customer_email }}</li>
+                {% endif %}
+                <li>账号创建时间：{{ moment(cus.member_since).format('LLL') }}</li>
+                <li>上次访问时间：{{ moment(cus.last_seen).fromNow(refresh=True) }}</li>
+            </ul>
+        </div>
+        <!-- 基本信息 [end] -->
+
+        <!-- 关注信息 [start] -->
+        <div id="follow-info" class="col-lg-2 col-sm-3 col-xs-12">
+            <ul class="list-group center-block">
+                <li class="list-group-item">
+                    <a class="btn btn-primary" href="{{ url_for('customer.show_follow_author', customer_name=cus.customer_name) }}" target="_blank">
+                        关注
+                        <span class="number">{{ cus.follow_author.count() }}</span>
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a class="btn btn-primary" href="{{ url_for('customer.show_fans', customer_name=cus.customer_name) }}" target="_blank">
+                        被关注
+                        <span class="number">{{ cus.fans.count() }}</span>
+                    </a>
+                </li>
+                <li id="comment-count" class="list-group-item">
+                    <a class="btn btn-default disabled" href="javascript:;">
+                        评论数
+                        <span class="number">{{ cus.comments.count() }}</span>
+                    </a>
+                </li>
+                {% if current_user.can(Permission.FOLLOW) and current_user.customer_id != cus.customer_id %}
+                    <li class="list-group-item">
+                        {% if current_user.is_following(cus) %}
+                            <button id="unfollow" class="btn btn-danger" role="button">取消关注</button>
+                        {% else %}
+                            <button id="follow" class="btn btn-success" role="button">关注</button>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- 关注信息 [end] -->
+
+        {% if (current_user.is_authenticated and current_user.customer_id == cus.customer_id) or current_user.is_administrator() %}
+            <!-- 编辑信息按钮组 [start] -->
+            <div id="update-group" class="col-xs-12">
+                <a class="btn btn-primary" href="{{ url_for('customer.update_customer_info', customer_name=cus.customer_name) }}">编辑信息</a>
+                <button id="update-head-portrait" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-hp-modal">更换头像</button>
+            </div>
+            <!-- 编辑信息按钮组 [end] -->
+        {% endif %}
+
+        <!-- 个人简介 [start] -->
+        <div class="col-xs-12">
+            <div id="desc" class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">个人简介</h3>
+                </div>
+                <div class="panel-body"></div>
+            </div>
+        </div>
+        <!-- 个人简介 [end] -->
+    </div>
+</div>
+<!-- 用户信息 [end] -->
+
+<!-- 文章列表模块 [start] -->
+<div class="container article-list">
+    <div class="row">
+        <div id="article-list-main-content" class="col-lg-8 col-lg-push-2 col-md-10 col-md-push-1">
+            <h3 class="text-center">发布的文章</h3>
+
+            <!-- 文章列表 [start] -->
+            {% if article_list %}
+            <ul class="list-group">
+                {% for article in article_list %}
+                    <li class="list-group-item">
+                        <div class="box-1">
+                            <a class="customer-name" href="{{ url_for('customer.customer_page', customer_name=article.author.customer_name) }}" target="_blank">{{ article.author.customer_name }}</a>
+                            <span class="publish-time">{{ moment(article.publish_time).format('L') }}</span>
+                        </div>
+                        <div class="box-2">
+                            <a class="title" href="{{ url_for('main.show_article', article_id=article.article_id) }}" target="_blank">{{ article.title }}</a>
+                        </div>
+                        <div class="box-3">
+                            <div class="comment-count">
+                                <span class="glyphicon glyphicon-comment"></span>
+                                <span class="text">{{ article.comments.count() }}</span>
+                            </div>
+                            {% if current_user.is_authenticated and current_user.customer_id == cus.customer_id %}
+                                <a class="edit" href="{{ url_for('main.edit_article', article_id=article.article_id) }}" target="_blank">编辑</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-center no-articles">该用户没有发布过文章</p>
+            {% endif %}
+            <!-- 文章列表 [end] -->
+
+            <!-- 分页导航 [start] -->
+            {% if page_count > 1 %}
+            <nav class="pagination-box" aria-label="Page navigation">
+                <ul class="pagination">
+                    <!-- 第一页 -->
+                    {% if current_page == 1 %}
+                        <li class="disabled">
+                            <span>
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=1) }}">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <!-- 上一页 -->
+                    {% if current_page == 1 %}
+                        <li class="disabled">
+                            <span>
+                                <span aria-hidden="true">&laquo;</span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=current_page - 1) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <!-- 数字翻页 -->
+                    {% if page_count <= 3 %}
+                        {% for i in range(1, page_count + 1) %}
+                            <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                        {% endfor %}
+                    {% else %}
+                        {% if current_page > 1 %}
+                            {% if current_page < page_count %}
+                                {% for i in range(current_page - 1, current_page + 2) %}
+                                    <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                                {% endfor %}
+                            {% else %}
+                                {% for i in range(page_count - 2, page_count + 1) %}
+                                    <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% else %}
+                            {% for i in range(1, 4) %}
+                                <li {% if i == current_page %}class="active"{% endif %}><a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=i) }}">{{ i }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                    <!-- 下一页 -->
+                    {% if current_page == page_count %}
+                        <li class="disabled">
+                            <span>
+                                <span aria-hidden="true">&raquo;</span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=current_page + 1) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <!-- 最后一页 -->
+                    {% if current_page == page_count %}
+                        <li class="disabled">
+                            <span>
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </span>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for('customer.customer_page', customer_name=cus.customer_name, page=page_count) }}">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            <!-- 分页导航 [end] -->
+        </div>
+    </div>
+</div>
+<!-- 文章列表模块 [end] -->
+
+{% endblock %}
+{% block javascript %}
+<script src="/static/customer/js/index.js"></script>
+{% endblock %}
