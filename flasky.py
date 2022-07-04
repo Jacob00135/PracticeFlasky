@@ -12,7 +12,7 @@ if os.environ.get('FLASK_COVERAGE') == '1':
     COV.start()
 
 app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
-
+print(app.url_map)
 
 @app.shell_context_processor
 def make_shell_context():
